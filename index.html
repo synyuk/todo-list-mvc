@@ -2,25 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>TODO-LIST-MVC</title>
     <link rel="stylesheet" href="style/main.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-  <h1>To-Do List MVC</h1>
-  <div class="todo-container">
-    <div class="sort-block">
-      <button class="sort-button" id="show-all">Show All</button>
-      <button class="sort-button" id="no-completted">No completted</button>
-      <button class="sort-button disabled" id="sort-date">Sort by Date</button>
-      <button class="sort-button disabled" id="sort-name">Sort by Name</button>
-      <button class="sort-button" id="clear">Clear</button>
+  <div class="todo-wrap">
+    <label class="switch">
+      <input type="checkbox">
+      <span class="slider round"></span>
+    </label>
+    <h1>To-Do List MVC</h1>
+    <div class="todo-container">
+      <div class="sort-block">
+        <button data-value="1" class="sort-button" id="show-all">Show All</button>
+        <button data-value="2" class="sort-button" id="no-completed">No completted</button>
+        <button data-value="3" class="sort-button" id="sort-date">Sort by Date</button>
+        <button data-value="4" class="sort-button" id="sort-name">Sort by Name</button>
+        <button data-value="5" class="sort-button" id="clear">Clear</button>
+      </div>
+      <select id="filter">
+        <option value="" disabled selected>Choose what you want</option>
+        <option value="1">Show All</option>
+        <option value="2">No completted</option>
+        <option value="3">Sort by Date</option>
+        <option value="4">Sort by Name</option>
+        <option value="5">Clear</option>
+      </select>
+      <div class="todo-form">
+        <input type="text" id="todo-input" placeholder="Add a new task...">
+        <button id="todo-add" type="submit">Add</button>
+      </div>
+      <ul class="todo-list" id="todo-list"></ul>
     </div>
-    <div class="todo-form">
-      <input type="text" id="todo-input" placeholder="Add a new task...">
-      <button id="todo-add" type="submit">Add</button>
-    </div>
-    <ul class="todo-list" id="todo-list"></ul>
   </div>
   <script type="module" src="scripts/controller.js"></script>
+  <script type="module" src="scripts/main.js"></script>
 </body>
 </html>

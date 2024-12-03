@@ -1,50 +1,59 @@
-class TodoView{
-    id = 0;
-    constructor(text, id) {
-        this.text = text;
-        this.isDone = false;
-        this.div = null;
+class TodoView {
+    constructor(model) {
+        this.model = model;
+        this.model.addObserver(this.render.bind(this));
     }
 
-    createTask(name, id) {
-        this.div = document.createElement("div");
-        this.div.classList.add("task");
-        this.div.dataset.id = this.id;
+    createTask(name, id, date, completed) {
+        const div = document.createElement("div");
+        div.classList.add("task");
+        if(completed) {
+            div.classList.add("completed");
+        }
+        div.dataset.id = id;
 
         let input = document.createElement("input");
-        input.addEventListener("click", (e) => this.changeState(e.target.closest(".task")));
         input.type = "checkbox";
+        if(completed) {
+            input.checked = true;
+        }
+        input.addEventListener("click", (e) => {
+            this.changeState(e.target.closest(".task"));
+            this.model.changeTodoStatus(id);
+        });
 
         let p = document.createElement("p");
         p.innerText = name;
 
         let btnDelete = document.createElement("div")
         btnDelete.classList.add("delete");
+        btnDelete.addEventListener("click", () => {
+            this.model.deleteTodo(id);
+        });
 
-        let date = document.createElement("div");
-        let timeNow = new Date();
+        let Date = document.createElement("div");
+        let timeNow = date;
         let hours = String(timeNow.getHours()).padStart(2, '0');
         let minutes = String(timeNow.getMinutes()).padStart(2, '0');
         let seconds = String(timeNow.getSeconds()).padStart(2, '0');
-        date.innerText = hours+ ':' +minutes+ ':' +seconds;
+        Date.innerText = hours+ ':' +minutes+ ':' +seconds;
 
-        this.div.append(input);
-        this.div.append(p);
-        this.div.append(btnDelete);
-        this.div.append(date);
-        document.querySelector('#todo-list').append(this.div);
+        div.append(input, p, btnDelete, Date);
+        document.querySelector('#todo-list').append(div);
     }
 
     changeState(element) {
-        this.isDone = !this.isDone;
         element.classList.toggle("completed");
     }
 
+    render() {
+        const todoList = document.querySelector('#todo-list');
+        todoList.innerHTML = "";
+        this.model.todos.forEach(todo => {
+            this.createTask(todo.text, todo.id, todo.date, todo.complete);
+        });
+        console.log(this.model.todos);
+    }
 }
-
-// let arr = new TodoView("asdasdasdasd");
-// let arr2 = new TodoView("111");
-// arr.createTask();
-// arr2.createTask();
 
 export default TodoView;

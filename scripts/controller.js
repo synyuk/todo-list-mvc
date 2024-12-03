@@ -2,64 +2,69 @@ import TodoModel from './model.js';
 import TodoView from './view.js';
 
 class TodoController {
+    todoList = document.querySelector('#todo-list');
 
     constructor(model, view) {
-        this.view = view;
         this.model = model;
-
+        this.view = view;
         this.buttonClick();
     }
 
-    buttonClick(){
+    buttonClick() {
+        document.querySelector('#filter').addEventListener('change', (e) => {
+            document.querySelector('[data-value ="' + e.target.value + '"]').click();
+        })
         document.querySelector('#todo-add').addEventListener('click', this.add.bind(this));
+        document.querySelector('#todo-input').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                this.add.apply(this);
+            }
+        });
         document.querySelector('#clear').addEventListener('click', this.clear.bind(this));
-        document.body.addEventListener('click', (e) => this.delete(e));
-        document.querySelector('#no-completted').addEventListener('click', this.noCompleted.bind(this));
+        document.querySelector('#no-completed').addEventListener('click', this.noCompleted.bind(this));
         document.querySelector('#show-all').addEventListener('click', this.showAll.bind(this));
+        document.querySelector('#sort-date').addEventListener('click', this.sortByDate.bind(this));
+        document.querySelector('#sort-name').addEventListener('click', this.sortByName.bind(this));
     }
 
-    add(){
+    add() {
         let name = document.querySelector("#todo-input").value;
         if (name === "") return;
-        this.view.createTask(name, this.model.id);
-        this.model.addTodo(name, this.view.id);
-        this.model.id++;
-        this.view.id++;
+        this.model.addTodo(name);
         document.querySelector("#todo-input").value = "";
     }
 
-    clear(){
-        document.querySelector('#todo-list').innerHTML = "";
-        this.model.todos = [];
-        this.model.id = 0;
-        this.view.id = 0;
+    clear() {
+        this.model.clearTodos();
     }
 
-    delete(e){
-        if(e.target && (e.target.classList.contains('delete'))){
-            let id = Number(e.target.closest('.task').dataset.id);
-            //console.log(typeof(id));
-            e.target.closest('.task').remove();
-            this.model.deleteTodo(id);
-        }
-    }
-
-    noCompleted(){
-        document.querySelectorAll('#todo-list .task').forEach( (item) => {
-            if(item.classList.contains('completed')){
-                item.classList.add('d-none')
-            }
+    noCompleted() {
+        this.todoList.innerHTML = "";
+        this.model.todos.filter(todo => !todo.complete).forEach(todo => {
+            this.view.createTask(todo.text, todo.id, todo.date, todo.complete);
         });
     }
 
-    showAll(){
-        document.querySelectorAll('#todo-list .task').forEach( (item) => {
-            if(item.classList.contains('d-none')){
-                item.classList.remove('d-none')
-            }
+    showAll() {
+        this.todoList.innerHTML = "";
+        this.model.todos.forEach(todo => {
+            this.view.createTask(todo.text, todo.id, todo.date, todo.complete);
         });
     }
 
+    sortByDate() {
+        this.model.todos.sort((a, b) => b.date.getTime() - a.date.getTime())
+        this.showAll();
+    }
+
+    sortByName() {
+        this.model.todos.sort((a, b) => a.text.localeCompare(b.text));
+        this.showAll();
+    }
 }
 
-const app = new TodoController(new TodoModel(), new TodoView());
+const model = new TodoModel();
+const view = new TodoView(model);
+const app = new TodoController(model, view);
+
+export default TodoController;

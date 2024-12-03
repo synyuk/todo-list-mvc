@@ -1,34 +1,46 @@
 class TodoModel {
-    constructor(id) {
-        this.todos = []
-        this.id = id
+    constructor() {
+        this.todos = [];
+        this.id = 0;
+        this.observers = [];
     }
 
-    addTodo(name,id){
-        let todo = {
-            id: id,
+    addObserver(observer) {
+        this.observers.push(observer);
+    }
+
+    notifyObservers() {
+        this.observers.forEach(callback => callback());
+    }
+
+    addTodo(name) {
+        const todo = {
+            id: this.id,
             text: name,
-            date: new Date().getTime()
+            date: new Date(),
+            complete: false
         };
         this.todos.push(todo);
         this.id++;
-        console.log(this.todos);
+        this.notifyObservers();
     }
 
-    deleteTodo(id){
-        this.todos = this.todos.filter(todo => todo.id !== Number(id));
-        console.log(this.todos);
+    deleteTodo(id) {
+        this.todos = this.todos.filter(todo => todo.id !== id);
+        this.notifyObservers();
     }
 
-    sortTodos() {
-        this.todos.sort((a, b) => new Date(a.date) - new Date(b.date));
+    clearTodos() {
+        this.todos = [];
+        this.notifyObservers();
     }
+
+    changeTodoStatus(id) {
+        const todo = this.todos.find(todo => todo.id === id);
+        todo.complete = !todo.complete;
+        this.notifyObservers();
+    }
+
 }
-
-
-//let task = new TodoModel();
-// task.addTodo('11')
-// task.addTodo('22')
-// task.deleteTodo(0)
 
 export default TodoModel;
