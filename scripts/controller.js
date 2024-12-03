@@ -65,6 +65,7 @@ class TodoController {
 
 const model = new TodoModel();
 const view = new TodoView(model);
+model.view = view;
 const app = new TodoController(model, view);
 
 export default TodoController;

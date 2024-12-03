@@ -1,16 +1,8 @@
 class TodoModel {
-    constructor() {
+    constructor(view) {
         this.todos = [];
         this.id = 0;
-        this.observers = [];
-    }
-
-    addObserver(observer) {
-        this.observers.push(observer);
-    }
-
-    notifyObservers() {
-        this.observers.forEach(callback => callback());
+        this.view = view;
     }
 
     addTodo(name) {
@@ -22,23 +14,23 @@ class TodoModel {
         };
         this.todos.push(todo);
         this.id++;
-        this.notifyObservers();
+        this.view.render();
     }
 
     deleteTodo(id) {
         this.todos = this.todos.filter(todo => todo.id !== id);
-        this.notifyObservers();
+        this.view.render();
     }
 
     clearTodos() {
         this.todos = [];
-        this.notifyObservers();
+        this.view.render();
     }
 
     changeTodoStatus(id) {
         const todo = this.todos.find(todo => todo.id === id);
         todo.complete = !todo.complete;
-        this.notifyObservers();
+        this.view.render();
     }
 
 }

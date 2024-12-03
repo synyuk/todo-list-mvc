@@ -1,7 +1,6 @@
 class TodoView {
     constructor(model) {
         this.model = model;
-        this.model.addObserver(this.render.bind(this));
     }
 
     createTask(name, id, date, completed) {
