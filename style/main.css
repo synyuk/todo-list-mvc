@@ -288,6 +288,14 @@ input:checked + .slider:before {
     background-size: 16px;
 }
 
+.clock{
+    display: flex;
+    align-items: center;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
 @media (min-width: 768px) {
     #filter{
         display: none;
