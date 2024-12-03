@@ -288,6 +288,11 @@ input:checked + .slider:before {
     background-size: 16px;
 }
 
+@media (min-width: 768px) {
+    #filter{
+        display: none;
+    }
+}
 @media(max-width: 767px){
     .sort-block{
         display: none;
