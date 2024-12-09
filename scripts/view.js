@@ -21,8 +21,20 @@ class TodoView {
             this.model.changeTodoStatus(id);
         });
 
-        let p = document.createElement("p");
-        p.innerText = name;
+        let p = document.createElement("input");
+        p.classList.add("input-text");
+        p.value = name;
+
+        p.addEventListener("change", (e) => {
+            this.model.changeName(id, p.value);
+        });
+
+        let btnEdit = document.createElement("div")
+        btnEdit.classList.add("edit");
+
+        btnEdit.addEventListener("click", () => {
+            p.focus();
+        });
 
         let btnDelete = document.createElement("div")
         btnDelete.classList.add("delete");
@@ -37,7 +49,7 @@ class TodoView {
         let seconds = String(timeNow.getSeconds()).padStart(2, '0');
         Date.innerText = hours+ ':' +minutes+ ':' +seconds;
 
-        div.append(input, p, btnDelete, Date);
+        div.append(input, p, btnEdit, btnDelete, Date);
         document.querySelector('#todo-list').append(div);
     }
 

@@ -69,3 +69,19 @@ model.view = view;
 const app = new TodoController(model, view);
 
 export default TodoController;
+
+
+
+//завдання від Олексія
+class storageService {
+    //написати метод для взаємодії з контроллером
+    constructor() {
+        this.service = [];
+    }
+    add(){
+        this.task.push();
+    }
+    save(){
+        this.tasks = JSON(localStorage) || [];
+    }
+}
